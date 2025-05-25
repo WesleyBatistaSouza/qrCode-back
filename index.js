@@ -13,7 +13,17 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use('/', router);
 
-app.listen(port, async () => {
+syncDatabase().then(() => {
+    console.log('Banco de dados sincronizado!');
+}).catch(err => {
+  console.error('Erro ao sincronizar o banco de dados:', err);
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
-    await syncDatabase();
-})
+  });
+}
+
+
+export default app;
