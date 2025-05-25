@@ -1,9 +1,19 @@
 import { Products } from "../models/estoque.models.js";
 
 export const limitedProducts = async (req, res) => {
+  // Get pagination parameters from query string with defaults
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
+
+  // Validate pagination parameters
+  if (page < 1) {
+    return res.status(400).json({ message: "Page must be a positive integer" });
+  }
+
+  if (limit < 1 || limit > 100) {
+    return res.status(400).json({ message: "Limit must be between 1 and 100" });
+  }
 
   try {
     const { count, rows } = await Products.findAndCountAll({
@@ -11,15 +21,17 @@ export const limitedProducts = async (req, res) => {
       offset,
       order: [["codigo", "ASC"]],
     });
+    
     res.json({
       total: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
+      pageSize: limit,
       data: rows,
     });
   } catch (error) {
     console.error("Erro ao buscar produtos:", error);
-    res.status(500).send("Erro ao buscar produtos");
+    res.status(500).json({ message: "Erro ao buscar produtos" });
   }
 };
 
