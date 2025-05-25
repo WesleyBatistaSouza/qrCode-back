@@ -1,7 +1,7 @@
 import express from 'express';
-import { syncDatabase } from './src/config/db.js';
-import corsMiddleware from './src/middleware/cors.js';
-import router from './src/routes/products.routes.js';
+import { syncDatabase } from './config/db.js';
+import corsMiddleware from './middleware/cors.js';
+import router from './routes/products.routes.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
