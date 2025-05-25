@@ -1,18 +1,11 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
-
-// Carrega as variáveis de ambiente do .env SOMENTE se NÃO estiver em ambiente de produção (ou Vercel)
-// No Vercel, as variáveis já são injetadas no process.env
 if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
   dotenv.config();
 }
 
-// Uma verificação de log mais precisa
-console.log("Valor de process.env.DATABASE_URL:", process.env.DATABASE_URL);
-
 if (!process.env.DATABASE_URL) {
   console.error("ERRO CRÍTICO: DATABASE_URL não está definida!");
-  // É bom lançar um erro aqui para parar a aplicação se a variável crucial não estiver presente
   throw new Error("DATABASE_URL environment variable is not configured.");
 }
 
